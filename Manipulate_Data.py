@@ -8,4 +8,6 @@ data = arff.loadarff(r"C:\REU\REU_NMSU\final-dataset-short.arff")
 df = pd.DataFrame(data[0])
 print(df)
 
+data.shape
+
 from sklearn.ensemble import RandomForestClassifier
