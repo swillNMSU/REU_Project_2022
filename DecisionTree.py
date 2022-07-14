@@ -1,10 +1,11 @@
-# Test run to see my manipulated data
+# Manipulateing the data and utilizing random forest classifier to detect attack packets
 # Using pandas libary to put my data in a row/column table to actually
 
 from random import Random
 from scipy.io import arff
 import pandas as pd
 import numpy as np
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
 
 # Loads my data file into a variable
 BaseData = arff.loadarff(r"C:\REU\REU_NMSU\final-dataset.arff")
@@ -85,7 +86,6 @@ model.feature_importances_
 
 # Creaeting a bar graph of most important features and only focused on first 20
 feature_importance_std = pd.Series(model.feature_importances_, index = data_X.columns)
-feature_importance_std.nlargest(20).plot(kind = 'bar', title = 'Standardised Dataset Feature Selection using ExtraTreesClassifier')
 
 # New dataset for only the top 20 most important features
 data_new_20features_X = data_X[['PKT_ID', 'TO_NODE', 'PKT_SIZE', 'FID', 'SEQ_NUMBER', 'NUMBER_OF_PKT', 'NUMBER_OF_BYTE', 'NODE_NAME_TO', 'PKT_IN', 'PKT_OUT', 'PKT_R', 'PKT_DELAY_NODE', 'PKT_RATE', 'BYTE_RATE', 'PKT_AVG_SIZE', 'UTILIZATION', 'PKT_DELAY', 'PKT_SEND_TIME', 'PKT_RESEVED_TIME', 'LAST_PKT_RESEVED']]
@@ -116,37 +116,23 @@ X_train_std_20 = ss_20.fit_transform(X_train_20)
 X_test_std_20 = ss_20.fit_transform(X_test_20)
 
 '''
-Random Forest Classification
+Decision Tree: 
 '''
 
-from sklearn.ensemble import RandomForestClassifier
-rf = RandomForestClassifier()
-rf.fit(X_train_std_20, Y_train_20)
+from sklearn.tree import DecisionTreeClassifier
 
-rf_Y_pred = rf.predict(X_test_std_20)
+dt = DecisionTreeClassifier()
 
-from sklearn.metrics import accuracy_score
-from sklearn.metrics import classification_report
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import roc_curve
-from sklearn.metrics import roc_auc_score
+dt.fit(X_train_std_20, Y_train_20)
 
+Y_pred_dt = dt.predict(X_test_std_20)
 
+dt.score(X_test_std_20, Y_test_20)
 
-print("Classification Report for Random Forest: \n", classification_report(Y_test_20, rf_Y_pred))
+print("Classification Report for Decision Tree: \n", classification_report(Y_test_20, Y_pred_dt))
 
-rf_conf_mat = confusion_matrix(Y_test_20, rf_Y_pred)
-print("Random Forest Confusion: \n", rf_conf_mat)
+dt_conf_mat = confusion_matrix(Y_test_20, Y_pred_dt)
+print("Decision Tree Confusion Matrix: \n", dt_conf_mat)
 
-acc_score = accuracy_score(Y_test_20, rf_Y_pred)
-print("Accuracy Score for Random Forest Classification: \n", acc_score * 100)
-
-fpr, tpr, thresh = roc_curve(Y_test_20, rf_Y_pred, pos_label = 1)
-
-print("False Positive Rate: \n", fpr)
-print("True Positive Rate: \n", tpr)
-print("Thresholds: \n", thresh)
-
-auc = roc_auc_score(Y_test_20, rf_Y_pred, multi_class = 'ovr')
-
-print(auc)
+acc_score_dt = accuracy_score(Y_test_20, Y_pred_dt)
+print("Accuracy Score for Decision Tree: \n", acc_score_dt * 100)
