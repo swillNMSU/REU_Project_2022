@@ -1,9 +1,6 @@
 # Manipulateing the data and utilizing random forest classifier to detect attack packets
 # Using pandas libary to put my data in a row/column table to actually
 
-from operator import imod
-from pickletools import optimize
-from pyexpat import XML_PARAM_ENTITY_PARSING_UNLESS_STANDALONE
 from random import Random
 from bs4 import GuessedAtParserWarning
 from scipy.io import arff
