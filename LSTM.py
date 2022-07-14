@@ -123,14 +123,10 @@ X_test_std_20 = ss_20.fit_transform(X_test_20)
 LSTM: Long Short Term Memory Network 
 '''
 
-from keras.preprocessing import sequence
-from keras.utils import np_utils
 from keras.models import Sequential
-from keras.layers import LSTM, Dense, Dropout, Activation, Embedding, GRU
-from keras.datasets import imbd
-from keras.utils.np.utils import to_categorical
-from keras import callbacks
-from keras.callbacks import ModelCheckpoint, EarlyStopping, ReduceLROnPlateau, CSVLogger
+from keras.layers import LSTM, Dense, Dropout, Activation
+from keras.utils.np_utils import to_categorical
+from keras.callbacks import EarlyStopping
 
 
 Y_train_lstm_20 = np.array(Y_train_20)
